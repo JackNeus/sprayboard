@@ -1,4 +1,6 @@
 *~
+\#*
+server/config/keys.json
 server/config/default.json
 server/node_modules/
 client/node_modules/

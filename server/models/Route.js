@@ -1,19 +1,17 @@
-// models/Route.js
-
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const RouteSchema = new mongoose.Schema({
 	name: {
 		type: String,
-		required: true
+		required: true,
 	},
 	url: {
-		type: String
+		type: String,
 	},
 	area: {
 		type: mongoose.Schema.ObjectId,
-		ref: 'Location'
-	}
+		ref: "Location",
+	},
 });
 
-module.exports = Route = mongoose.model('route', RouteSchema)
+module.exports = Route = mongoose.model("route", RouteSchema);
