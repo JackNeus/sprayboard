@@ -1,6 +1,5 @@
 *~
 \#*
-server/config/keys.json
-server/config/default.json
-server/node_modules/
-client/node_modules/
+*/keys.json
+*/default.json
+*node_modules/

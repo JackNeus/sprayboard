@@ -1,4 +1,3 @@
-// app.js
 const express = require("express");
 const connectDB = require("./config/db");
 const bodyParser = require("body-parser");
@@ -29,6 +28,6 @@ app.use("/api/users", users);
 
 app.get("/", (req, res) => res.send("Hello world!"));
 
-const port = process.env.PORT || 8082;
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

@@ -7,4 +7,5 @@ const ActorSchema = new mongoose.Schema({
 	},
 });
 
-module.exports = Actor = mongoose.model("actor", ActorSchema);
+const Actor = mongoose.model("actor", ActorSchema);
+module.exports = Actor;
