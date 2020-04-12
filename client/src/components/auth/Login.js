@@ -4,7 +4,7 @@ import classnames from "classnames";
 
 import axios from "axios";
 import { API_ROOT } from "../../config/api-config.js";
-import { handleLogin } from "../../utils/auth";
+import { currentUser, handleLogin } from "../../utils/auth";
 
 class Login extends Component {
   constructor() {
@@ -35,7 +35,7 @@ class Login extends Component {
         this.setState({
           errors: {},
         });
-        // TODO: redirect
+        this.props.history.push("/dashboard");
       })
       .catch((error) => {
         this.setState({
@@ -44,13 +44,15 @@ class Login extends Component {
       });
   };
 
-  render() {
+  componentDidMount() {
     // If logged in, redirect.
-    if (localStorage.jwtToken) {
+    if (currentUser()) {
       console.log("Already logged in, redirecting...");
-      window.location.href = "/";
-      return null;
+      this.props.history.push("/");
     }
+  }
+
+  render() {
     const { errors } = this.state;
 
     return (

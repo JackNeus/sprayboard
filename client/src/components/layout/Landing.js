@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { loggedIn } from "../../utils/auth";
+import { currentUser } from "../../utils/auth";
 
 class Landing extends Component {
   render() {
@@ -18,7 +18,7 @@ class Landing extends Component {
               passport and JWTs
             </p>
             <br />
-            {!loggedIn() && (
+            {!currentUser() && (
               <div>
                 <div className="col s6">
                   <Link

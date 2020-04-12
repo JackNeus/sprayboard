@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import PrivateRoute from "./components/auth/PrivateRoute";
 import "./App.css";
 
 import { handleLogin, handleLogout } from "./utils/auth";
@@ -8,6 +9,7 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Dashboard from "./components/admin/Dashboard";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -33,6 +35,12 @@ class App extends Component {
 					<Route exact path="/" component={Landing} />
 					<Route exact path="/register" component={Register} />
 					<Route exact path="/login" component={Login} />
+					<PrivateRoute
+						exact
+						path="/dashboard"
+						adminPage="true"
+						component={Dashboard}
+					/>
 				</div>
 			</Router>
 		);

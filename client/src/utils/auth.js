@@ -1,8 +1,16 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
-const loggedIn = () => {
-	return localStorage.jwtToken !== undefined;
+const isAdmin = () => {
+	let user = currentUser();
+	return user && user.admin;
+};
+
+const currentUser = () => {
+	if (localStorage.userData === undefined) {
+		return undefined;
+	}
+	return JSON.parse(localStorage.userData);
 };
 
 const handleLogin = (token) => {
@@ -18,7 +26,7 @@ const handleLogin = (token) => {
 	}
 	// Decode token to get user data
 	let decoded = jwt_decode(token);
-	localStorage.setItem("userData", decoded);
+	localStorage.setItem("userData", JSON.stringify(decoded));
 	return decoded;
 };
 
@@ -27,4 +35,4 @@ const handleLogout = () => {
 	localStorage.removeItem("userData");
 };
 
-export { loggedIn, handleLogin, handleLogout };
+export { isAdmin, currentUser, handleLogin, handleLogout };

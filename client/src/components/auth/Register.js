@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import classnames from "classnames";
 import axios from "axios";
 import { API_ROOT } from "../../config/api-config.js";
+import { currentUser } from "../../utils/auth";
 
 class Register extends Component {
   constructor() {
@@ -37,6 +38,14 @@ class Register extends Component {
         });
       });
   };
+
+  componentDidMount() {
+    // If logged in, redirect.
+    if (currentUser()) {
+      console.log("Already logged in, redirecting...");
+      this.props.history.push("/");
+    }
+  }
 
   render() {
     const { errors } = this.state;
