@@ -10,6 +10,7 @@ const validateLoginInput = require("../../validation/login");
 
 // Load User model
 const User = require("../../models/User");
+const passport = require("passport");
 
 // @route POST api/users/register
 // @desc Register user
@@ -74,7 +75,7 @@ router.post("/login", (req, res) => {
 				const payload = {
 					id: user.id,
 					name: user.name,
-					admin: user.isAdmin,
+					isAdmin: user.isAdmin,
 				};
 
 				// Sign token
@@ -100,4 +101,69 @@ router.post("/login", (req, res) => {
 	});
 });
 
+const summaryFields = "_id email name isAdmin";
+
+// @route GET api/users/
+// @desc Get all user data
+// @access Admin
+router.get(
+	"/",
+	passport.authenticate("admin-strategy", { session: false }),
+	(req, res) => {
+		User.find({}, summaryFields, { limit: 100 }).then((users) => {
+			return res.status(200).json({ users: users });
+		});
+	}
+);
+
+// @route PUT api/users/:id
+// @desc Edit user. Can only edit name and isAdmin.
+// @access Admin
+// TODO: Test
+router.put(
+	"/:id",
+	passport.authenticate("admin-strategy", { session: false }),
+	(req, res) => {
+		let update = {};
+		if (req.body.name != null) update.name = req.body.name;
+		if (req.body.isAdmin != null) update.isAdmin = req.body.isAdmin;
+
+		User.updateOne({ _id: req.params.id }, update).then((query) => {
+			if (query.n == 0) {
+				return res
+					.status(400)
+					.json({ usernotfound: "User not found." });
+			} else {
+				User.findOne({ _id: req.params.id }, summaryFields).then(
+					(user) => {
+						res.json(user);
+					}
+				);
+			}
+		});
+	}
+);
+
+// @route DELETE api/users/:id
+// @desc Delete user.
+// @access Admin
+// TODO: Test
+router.delete(
+	"/:id",
+	passport.authenticate("admin-strategy", { session: false }),
+	(req, res) => {
+		User.deleteOne({ _id: req.params.id }).then((query) => {
+			console.log(query);
+			if (query.n == 0) {
+				return res
+					.status(400)
+					.json({ usernotfound: "User not found." });
+			} else {
+				res.json({
+					success: true,
+				});
+			}
+		});
+	}
+);
 module.exports = router;

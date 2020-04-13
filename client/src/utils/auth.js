@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 
 const isAdmin = () => {
 	let user = currentUser();
-	return user && user.admin;
+	return user && user.isAdmin;
 };
 
 const currentUser = () => {
