@@ -12,6 +12,11 @@ const validateLoginInput = require("../../validation/login");
 const User = require("../../models/User");
 const passport = require("passport");
 
+const usernotfound = { usernotfound: "User not found" };
+const emailnotfound = { emailnotfound: "Email not found" };
+const emailexists = { email: "Email already exists" };
+const incorrectpassword = { password: "Incorrect password" };
+
 // @route POST api/users/register
 // @desc Register user
 // @access Public
@@ -26,7 +31,7 @@ router.post("/register", (req, res) => {
 
 	User.findOne({ email: req.body.email }).then((user) => {
 		if (user) {
-			return res.status(400).json({ email: "Email already exists" });
+			return res.status(400).json(emailexists);
 		} else {
 			const newUser = new User({
 				name: req.body.name,
@@ -64,7 +69,7 @@ router.post("/login", (req, res) => {
 	User.findOne({ email: req.body.email }).then((user) => {
 		// Check if user exists
 		if (!user) {
-			return res.status(404).json({ emailnotfound: "Email not found" });
+			return res.status(404).json(emailnotfound);
 		}
 
 		// Check password
@@ -73,8 +78,7 @@ router.post("/login", (req, res) => {
 				// User matched
 				// Create JWT payload
 				const payload = {
-					id: user.id,
-					name: user.name,
+					_id: user.id,
 					isAdmin: user.isAdmin,
 				};
 
@@ -93,9 +97,7 @@ router.post("/login", (req, res) => {
 					}
 				);
 			} else {
-				return res
-					.status(400)
-					.json({ passwordincorrect: "Password incorrect" });
+				return res.status(400).json(incorrectpassword);
 			}
 		});
 	});
@@ -116,6 +118,29 @@ router.get(
 	}
 );
 
+// @route GET api/users/:id
+// @desc Get user. Admins can get only users, regular users can only get themselves.
+// @access User
+// TODO: Test
+router.get(
+	"/:id",
+	passport.authenticate("user-strategy", { session: false }),
+	(req, res) => {
+		// Can only access own information if not admin.
+		if (req.params.id != req.user._id && !req.user.isAdmin) {
+			return res.send(401);
+		}
+		User.findOne({ _id: req.params.id }, summaryFields).then((user) => {
+			console.log(user);
+			if (!user) {
+				return res.status(400).json(usernotfound);
+			} else {
+				return res.json(user);
+			}
+		});
+	}
+);
+
 // @route PUT api/users/:id
 // @desc Edit user. Can only edit name and isAdmin.
 // @access Admin
@@ -130,9 +155,7 @@ router.put(
 
 		User.updateOne({ _id: req.params.id }, update).then((query) => {
 			if (query.n == 0) {
-				return res
-					.status(400)
-					.json({ usernotfound: "User not found." });
+				return res.status(400).json(usernotfound);
 			} else {
 				User.findOne({ _id: req.params.id }, summaryFields).then(
 					(user) => {
@@ -155,9 +178,7 @@ router.delete(
 		User.deleteOne({ _id: req.params.id }).then((query) => {
 			console.log(query);
 			if (query.n == 0) {
-				return res
-					.status(400)
-					.json({ usernotfound: "User not found." });
+				return res.status(400).json(usernotfound);
 			} else {
 				res.json({
 					success: true,

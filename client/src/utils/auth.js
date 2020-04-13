@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { API_ROOT } from "../config/api-config";
 
 const isAdmin = () => {
 	let user = currentUser();
@@ -7,10 +8,10 @@ const isAdmin = () => {
 };
 
 const currentUser = () => {
-	if (localStorage.userData === undefined) {
+	if (window.userData === undefined) {
 		return undefined;
 	}
-	return JSON.parse(localStorage.userData);
+	return window.userData;
 };
 
 const handleLogin = (token) => {
@@ -24,15 +25,14 @@ const handleLogin = (token) => {
 		// Delete auth header
 		delete axios.defaults.headers.common["Authorization"];
 	}
-	// Decode token to get user data
-	let decoded = jwt_decode(token);
-	localStorage.setItem("userData", JSON.stringify(decoded));
-	return decoded;
+	// Decode token to get token data.
+	window.userData = jwt_decode(token);
+	return window.userData;
 };
 
 const handleLogout = () => {
 	localStorage.removeItem("jwtToken");
-	localStorage.removeItem("userData");
+	window.userData = undefined;
 };
 
 export { isAdmin, currentUser, handleLogin, handleLogout };

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import classnames from "classnames";
 
 import axios from "axios";
-import { API_ROOT } from "../../config/api-config.js";
+import { API_ROOT } from "../../config/api-config";
 import { currentUser, handleLogin } from "../../utils/auth";
 
 class Login extends Component {

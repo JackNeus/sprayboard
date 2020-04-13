@@ -12,7 +12,7 @@ module.exports = (passport) => {
 	passport.use(
 		"user-strategy",
 		new JwtStrategy(opts, (jwt_payload, done) => {
-			User.findById(jwt_payload.id)
+			User.findById(jwt_payload._id)
 				.then((user) => {
 					if (user) {
 						return done(null, user);
@@ -25,7 +25,7 @@ module.exports = (passport) => {
 	passport.use(
 		"admin-strategy",
 		new JwtStrategy(opts, (jwt_payload, done) => {
-			User.findById(jwt_payload.id)
+			User.findById(jwt_payload._id)
 				.then((user) => {
 					if (user && user.isAdmin) {
 						return done(null, user);
