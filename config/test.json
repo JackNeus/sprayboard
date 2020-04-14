@@ -1,0 +1,4 @@
+{
+	"mongoURI": "mongodb+srv://admin:sHRmVk2yURMObn1w@cluster0-heut2.mongodb.net/test?retryWrites=true&w=majority",
+	"secretOrKey": "royalRobbins"
+}

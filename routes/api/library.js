@@ -10,7 +10,7 @@ const passport = require("passport");
 let videoexists = { video: "Video already exists." };
 let videonotfound = { video: "Video does not exist." };
 
-// @route Get api/videos
+// @route GET api/videos
 // @desc Search for videos
 // @access Public
 router.get("/videos", (req, res) => {
@@ -23,6 +23,20 @@ router.get("/videos", (req, res) => {
 	Video.find(filter).then((data) => {
 		console.log(data);
 		res.json(data);
+	});
+});
+
+// @route GET api/videos
+// @desc Get video by id
+// @access Public
+router.get("/videos/:id", (req, res) => {
+	// TODO: Resolve links
+	Video.findOne({ _id: req.params.id }, "-addedBy").then((video) => {
+		if (!video) {
+			return res.status(400).json(videonotfound);
+		} else {
+			return res.json(video);
+		}
 	});
 });
 
