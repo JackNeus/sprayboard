@@ -23,7 +23,7 @@ const incorrectpassword = { password: "Incorrect password" };
 router.post("/register", (req, res) => {
 	// Form validation
 	const { errors, isValid } = validateRegisterInput(req.body);
-	//console.log(req);
+
 	// Check validation
 	if (!isValid) {
 		return res.status(400).json(errors);

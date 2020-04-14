@@ -9,6 +9,11 @@ const VideoSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	addedBy: {
+		type: mongoose.Schema.ObjectId,
+		ref: "User",
+		required: true,
+	},
 	actors: [
 		{
 			type: mongoose.Schema.ObjectId,
