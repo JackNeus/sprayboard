@@ -1,8 +1,7 @@
 *~
 \#*
 *.env*
-*/keys.json
-*/default.json
+config/*.json
 *node_modules/
 *.sublime-project
 *.sublime-workspace

@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "client-install": "npm install --prefix client",
-    "start": "node server.js",
-    "server": "nodemon server.js",
+    "start": "node start.js",
+    "server": "nodemon start.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test jest"
   },
   "author": "",
   "license": "ISC",
@@ -29,7 +29,21 @@
     "validator": "^13.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
-    "nodemon": "^2.0.3"
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "node_modules/*",
+      "client/*"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules/*",
+      "client/*"
+    ]
   }
 }
