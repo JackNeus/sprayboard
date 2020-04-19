@@ -36,8 +36,11 @@ class Login extends Component {
           errors: {},
         });
         this.props.history.push("/dashboard");
+        // Need to update App state so that it can pass to Navbar.
+        this.props.updateAppState();
       })
       .catch((error) => {
+        console.log(error);
         this.setState({
           errors: error.response.data,
         });

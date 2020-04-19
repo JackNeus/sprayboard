@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { currentUser } from "../../utils/auth";
 
 import axios from "axios";
 import { API_ROOT } from "../../config/api-config";

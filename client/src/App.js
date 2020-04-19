@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import "./App.css";
 
-import { handleLogin, handleLogout } from "./utils/auth";
+import { currentUser, handleLogin, handleLogout } from "./utils/auth";
 
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
@@ -27,14 +27,40 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
+	constructor() {
+		super();
+		this.state = {
+			currentUser: currentUser(),
+		};
+
+		this.updateCurrentUser = this.updateCurrentUser.bind(this);
+	}
+
+	// This gets passed to the Login component so that state can be updated
+	// upon login.
+	updateCurrentUser() {
+		this.setState({
+			currentUser: currentUser(),
+		});
+	}
+
 	render() {
 		return (
 			<Router>
 				<div className="App">
-					<Navbar />
+					<Navbar currentUser={this.state.currentUser} />
 					<Route exact path="/" component={Landing} />
 					<Route exact path="/register" component={Register} />
-					<Route exact path="/login" component={Login} />
+					<Route
+						exact
+						path="/login"
+						render={(props) => (
+							<Login
+								{...props}
+								updateAppState={this.updateCurrentUser}
+							/>
+						)}
+					/>
 					<PrivateRoute
 						exact
 						path="/dashboard"

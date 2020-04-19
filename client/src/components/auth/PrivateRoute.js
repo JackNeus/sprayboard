@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router";
 import { Route } from "react-router-dom";
+
 import { currentUser, isAdmin } from "../../utils/auth";
 
 const PrivateRoute = ({ component: Component, adminPage, ...rest }) => (

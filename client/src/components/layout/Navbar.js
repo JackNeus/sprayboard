@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { currentUser, handleLogout } from "../../utils/auth";
+import { handleLogout } from "../../utils/auth";
 
 function logout(e) {
 	handleLogout();
@@ -24,7 +24,7 @@ class Navbar extends Component {
 							MERN
 						</Link>
 
-						{currentUser() && (
+						{this.props.currentUser && (
 							<div
 								className="col s6 right black-text"
 								style={{
