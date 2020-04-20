@@ -65,7 +65,6 @@ router.post("/login", (req, res) => {
 		if (!user) {
 			return res.status(404).json(emailnotfound);
 		}
-		console.log(user);
 		// Check password
 		user.comparePassword(req.body.password).then((isMatch) => {
 			if (isMatch) {

@@ -6,7 +6,7 @@ const { setupDB } = require("./test-setup.js");
 setupDB();
 
 describe("Register Test", () => {
-	it("Succes", () => {
+	it("Success", async (done) => {
 		request
 			.post("/api/users/register")
 			.send({
@@ -16,13 +16,13 @@ describe("Register Test", () => {
 				password2: "myPassword",
 			})
 			.then((res) => {
-				console.log(res.body);
 				expect(res.status).toBe(200);
 				expect(res.body.name).toBe("Bob");
 				expect(res.body.email).toBe("bob@testing.com");
+				done();
 			});
 	});
-	it("Missing fields", () => {
+	it("Missing fields", async (done) => {
 		request
 			.post("/api/users/register")
 			.send({})
@@ -32,9 +32,10 @@ describe("Register Test", () => {
 				expect(res.body.email).toContain("required");
 				expect(res.body.password).toBeDefined();
 				expect(res.body.password2).toBeDefined();
+				done();
 			});
 	});
-	it("Password Mismatch", () => {
+	it("Password Mismatch", async (done) => {
 		request
 			.post("/api/users/register")
 			.send({
@@ -46,6 +47,55 @@ describe("Register Test", () => {
 			.then((res) => {
 				expect(res.status).toBe(400);
 				expect(res.body.password2).toContain("must match");
+				done();
+			});
+	});
+});
+
+describe("Register-Login Test", () => {
+	let email = "bob@testing.com";
+	let password = "myPassword";
+
+	beforeEach(async (done) => {
+		request
+			.post("/api/users/register")
+			.send({
+				name: "Bob",
+				email: email,
+				password: password,
+				password2: password,
+			})
+			.then((res) => {
+				expect(res.status).toBe(200);
+				done();
+			});
+	});
+
+	it("Success", async (done) => {
+		request
+			.post("/api/users/login")
+			.send({
+				email: email,
+				password: password,
+			})
+			.then((res) => {
+				expect(res.status).toBe(200);
+				expect(res.body.success).toBe(true);
+				done();
+			});
+	});
+
+	it("Incorrect Password", async (done) => {
+		request
+			.post("/api/users/login")
+			.send({
+				email: email,
+				password: "badPassword",
+			})
+			.then((res) => {
+				expect(res.status).toBe(400);
+				expect(res.body.password).toContain("Incorrect password");
+				done();
 			});
 	});
 });
